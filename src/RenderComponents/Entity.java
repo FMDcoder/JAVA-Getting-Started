@@ -9,8 +9,8 @@ import java.util.Comparator;
 
 public abstract class Entity {
 	
-	public static long index = 0;
-	public long objectIndex = 0;
+	private static long index = 0;
+	private long objectIndex = 0;
 	private String name;
 	private Entity parent;
 	private ArrayList<Entity> children = new ArrayList<>();
@@ -25,6 +25,10 @@ public abstract class Entity {
 	
 	public void setIndex(long index) {
 		objectIndex = index;
+	}
+	
+	public static long getClassIndex() {
+		return index;
 	}
 	
 	public String getName() {

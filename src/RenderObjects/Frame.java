@@ -5,8 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 import RenderComponents.DefaultAttributes;
+import RenderComponents.GraphicsAttributes;
 
-public class Frame extends DefaultAttributes {
+public class Frame extends GraphicsAttributes {
 
 	@Override
 	public void render(Graphics2D g2) {
