@@ -14,6 +14,13 @@ public class Dimension {
 	private double ScaleY, ScaleX;
 	private int PixelX, PixelY;
 	
+	private static int WindowWidth = 0;
+	private static int WindowHeight = 0;
+	private static int WindowX = 0;
+	private static int WindowY = 0;
+	
+	public static Window window;
+	
 	private Position position = Position.RELATIVE;
 	
 	public Dimension(double scaleY, int pixelY, double scaleX, int pixelX) {
@@ -22,6 +29,43 @@ public class Dimension {
 		
 		PixelY = pixelY;
 		PixelX = pixelX;
+	}
+	
+	public static void setWindow(Window window) {
+		Dimension.window = window;
+		
+		WindowX = window.getXOnScreen();
+		WindowY = window.getYOnScreen();
+		WindowWidth = window.getWidth();
+		WindowHeight = window.getHeight();
+		
+		window.setWindowMovedListener(new IWindowMoved() {
+			
+			@Override
+			public void windowMoved(int x, int y) {
+				// TODO Auto-generated method stub
+				WindowX = window.getXOnScreen();
+				WindowY = window.getYOnScreen();
+			}
+		});
+		
+		window.setWindowRescaledListener(new IWindowRescaled() {
+			
+			@Override
+			public void rescaled(int width, int height) {
+				// TODO Auto-generated method stub
+				WindowWidth = window.getWidth();
+				WindowHeight = window.getHeight();
+			}
+		});
+	}
+	
+	public static int getWindowWidth() {
+		return WindowWidth;
+	}
+	
+	public static int getWindowHeight() {
+		return WindowHeight;
 	}
 	
 	public void setPositionType(Position position) {

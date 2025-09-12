@@ -1,14 +1,14 @@
 package Modifiers;
 
-public enum Measurement {
+public enum Measure {
 	MM,
 	CM,
+	M,
 	IN,
 	PT,
 	PC,
 	PX,
 	PROCENT,
-	EM,
 	VW,
 	VH,
 	VMIN,
