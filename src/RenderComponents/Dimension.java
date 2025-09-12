@@ -112,16 +112,34 @@ public class Dimension {
 		return (int)(scale * size + pixel);
 	}
 	
-	private Point getAbsoluteRelative(Entity parent) {
+	private Point getAbsoluteRelativeSize(Entity parent) {
+		
+		if(parent instanceof DefaultAttributes) {
+			DefaultAttributes defAttr = (DefaultAttributes) parent;
+			
+			Point size = defAttr.getSize()
+					.getAbsolute(defAttr.getParent(), true);
+			
+			Point res = new Point();
+			
+			res.x = (int)(ScaleX * size.x + PixelX);
+			res.y = (int)(ScaleY * size.y + PixelY);
+		
+			return res;
+		}
+		return getAbsoluteAbsolute();
+	}
+	
+	private Point getAbsoluteRelativePosition(Entity parent) {
 		
 		if(parent instanceof DefaultAttributes) {
 			DefaultAttributes defAttr = (DefaultAttributes) parent;
 			
 			Point offset = defAttr.getPosition()
-					.getAbsolute(defAttr.getParent());
+					.getAbsolute(defAttr.getParent(), false);
 			
 			Point size = defAttr.getSize()
-					.getAbsolute(defAttr.getParent());
+					.getAbsolute(defAttr.getParent(), true);
 			
 			Point res = new Point();
 			
@@ -157,12 +175,13 @@ public class Dimension {
 		return res;
 	}
 	
-	public Point getAbsolute(Entity parent) {
+	public Point getAbsolute(Entity parent, boolean isSize) {
 		Point res = new Point();
 		
 		switch (position) {
 		case RELATIVE: {
-			res = getAbsoluteRelative(parent);
+			if(isSize) { res = getAbsoluteRelativeSize(parent); }
+			else { res = getAbsoluteRelativePosition(parent); }
 			break;
 		}
 		case ABSOLUTE: {

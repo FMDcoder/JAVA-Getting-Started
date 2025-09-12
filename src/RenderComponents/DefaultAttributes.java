@@ -7,17 +7,30 @@ import Modifiers.Position;
 public abstract class DefaultAttributes extends Entity {
 
 	private boolean active = true;
+	private IActivityListener activityListener;
 
 	public void setActivity(boolean active) {
+		if(active == this.active) return;
+		
 		this.active = active;
+		if(activityListener != null) {
+			activityListener.activityToggled(this.active);
+		}
 	}
 	
 	public void toggleActivity() {
 		this.active = !active;
+		if(activityListener != null) {
+			activityListener.activityToggled(this.active);
+		}
 	}
 	
 	public boolean getActivity() {
 		return this.active;
+	}
+	
+	public void setActivityListener(IActivityListener listener) {
+		this.activityListener = listener;
 	}
 	
 	private Dimension 
@@ -54,31 +67,10 @@ public abstract class DefaultAttributes extends Entity {
 	}
 	
 	protected Point getAbsolutePositionPixels() {
-		return this.positionDimension.getAbsolute(getParent());
+		return this.positionDimension.getAbsolute(getParent(), false);
 	}
 	
 	protected Point getAbsoluteSizePixels() {
-		return this.sizeDimension.getAbsolute(getParent());
-	}
-	
-	private int borderSize = 0;
-	private int borderColor = 0;
-	private float borderTransparency = 0;
-	private float borderRadius = 0;
-	
-	private int backgroundColor = 0;
-	private float backgroundTransparency = 0;
-	
-	
-	private float setTransparency(float value) {
-		return Math.max(0, Math.min(1, value));
-	}
-	
-	public void setBackgroundTransparency(float value) {
-		backgroundTransparency = setTransparency(value);
-	}
-	
-	public void setBorderTransparency(float value) {
-		borderTransparency = setTransparency(value);
+		return this.sizeDimension.getAbsolute(getParent(), true);
 	}
 }

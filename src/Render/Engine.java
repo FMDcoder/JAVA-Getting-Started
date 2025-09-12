@@ -10,21 +10,36 @@ import RenderObjects.Frame;
 
 public class Engine implements IGraphicWindow {
 
-	private Frame frame;
+	private Frame frame, frame2;
 	
 	@Override
 	public void setup(Entity body) {
 		// TODO Auto-generated method stub
 		frame = new Frame();
 		frame.setPosition(
-				new Dimension(0.5, -100, 0.5, -100)
+				new Dimension(0.4, 0, 0.4, 0)
 		);
 		
 		frame.setSize(
-				new Dimension(0, 200, 0, 200)
+				new Dimension(0.2, 0, 0.2, 0)
 		);
 		
-		frame.setPositionType(Position.FIXED);
+		frame.setPositionType(Position.RELATIVE);
+		
+		
+		frame2 = new Frame();
+		frame2.setPosition(
+				new Dimension(0.4, 0, 0.4, 0)
+		);
+		
+		frame2.setSize(
+				new Dimension(0.2, 0, 0.2, 0)
+		);
+		
+		frame2.setPositionType(Position.RELATIVE);
+		
+		frame.addChild(frame2);
+		
 		
 		body.addChild(frame);
 	}

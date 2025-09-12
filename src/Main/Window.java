@@ -210,7 +210,6 @@ public class Window extends Entity implements Runnable {
 			try {
 				frame.createBufferStrategy(3, bc);
 			} catch (AWTException e) {
-				e.printStackTrace();
 				frame.createBufferStrategy(3);
 			}
 			return;

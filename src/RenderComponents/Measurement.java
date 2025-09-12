@@ -21,10 +21,12 @@ public class Measurement {
 	public Measurement(Measure measure, double value) {
 		this.measure = measure;
 		this.value = value;
+		result = convertValue();
 	}
 	
 	public void setMeasurement(Measure measure) {
 		this.measure = measure;
+		result = convertValue();
 	}
 	
 	public Measure getMeasurement() {
@@ -33,17 +35,22 @@ public class Measurement {
 	
 	public void setValue(double value) {
 		this.value = value;
+		result = convertValue();
 	}
 	
 	public double getValue() {
 		return this.value;
 	}
 	
+	public double getResult() {
+		return this.result;
+	}
+	
 	private double convert(double val, double convertFactor) {
 		return val * convertFactor;
 	}
 	
-	private double convertValue(double value) {
+	private double convertValue() {
 		double VW = Dimension.getWindowWidth() * 0.01;
 		double VH = Dimension.getWindowHeight() * 0.01;
 		
@@ -60,6 +67,17 @@ public class Measurement {
 			return convert(getValue(), PT_TO_PX);
 		case PC:
 			return convert(getValue(), PC_TO_PX);
+		case PX:
+			return getValue();
+		case VW:
+			return convert(getValue(), VW);
+		case VH:
+			return convert(getValue(), VH);
+		case VMIN:
+			return convert(getValue(), Math.min(VW, VH));
+		case VMAX:
+			return convert(getValue(), Math.max(VW, VH));
+		
 		default:
 			return value;
 		
