@@ -3,15 +3,19 @@ package RenderComponents;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import Modifiers.Overflow;
+
 public class GraphicsAttributes extends DefaultAttributes {
 
-	private Measurement borderSize;
+	private Measurement borderSize0, borderSize1, borderSize2, borderSize3 ;
 	private Color borderColor = null;
 	private float borderTransparency = 0;
-	private Measurement borderRadius;
+	private Measurement borderRadius0, borderRadius1, borderRadius2, borderRadius3; 
 	
 	private Color backgroundColor = null;
 	private float backgroundTransparency = 0;
+	private Overflow overflow;
+	private IEvent eventListener = null;
 	
 	private float setTransparency(float value) {
 		return Math.max(0, Math.min(1, value));
@@ -33,28 +37,126 @@ public class GraphicsAttributes extends DefaultAttributes {
 		return borderTransparency;
 	}
 	
-	public void setBorderSize(Measurement measurement) {
-		if(measurement.getResult() < 0) {
-			borderSize = new Measurement(measurement.getMeasurement(), 0);
-			return;
-		}
-		borderSize = measurement;
+	public void setBorderSize(Measurement allsides) {
+		allsides.setValue(Math.max(allsides.getValue(), 0));
+		
+		borderSize0 = allsides;
+		borderSize1 = allsides;
+		borderSize2 = allsides;
+		borderSize3 = allsides;
 	}
 	
-	public Measurement getBorderSize() {
-		return borderSize;
+	public void setBorderSize(
+			Measurement topLeft, 
+			Measurement bottomRight
+		) {
+		topLeft.setValue(Math.max(topLeft.getValue(), 0));
+		bottomRight.setValue(Math.max(bottomRight.getValue(), 0));
+		
+		borderSize0 = topLeft;
+		borderSize2 = bottomRight;
 	}
 	
-	public void setBorderRadius(Measurement measurement) {
-		if(measurement.getResult() < 0) {
-			borderRadius = new Measurement(measurement.getMeasurement(), 0);
-			return;
-		}
-		borderRadius = measurement;
+	public void setBorderSize(
+			Measurement topLeft, 
+			Measurement topRight, 
+			Measurement bottomRight,
+			Measurement bottomLeft
+		) {
+		topLeft.setValue(Math.max(topLeft.getValue(), 0));
+		topRight.setValue(Math.max(topRight.getValue(), 0));
+		bottomRight.setValue(Math.max(bottomRight.getValue(), 0));
+		bottomLeft.setValue(Math.max(bottomLeft.getValue(), 0));
+		
+		borderSize0 = topLeft;
+		borderSize1 = topRight;
+		borderSize2 = bottomRight;
+		borderSize3 = bottomLeft;
 	}
 	
-	public Measurement getBorderRadius() {
-		return borderRadius;
+	public void setBorderSize(
+			Measurement topLeft, 
+			Measurement topRightAndBottomLeft, 
+			Measurement bottomRight
+		) {
+		topLeft.setValue(Math.max(topLeft.getValue(), 0));
+		bottomRight.setValue(Math.max(bottomRight.getValue(), 0));
+		topRightAndBottomLeft.setValue(Math.max(topRightAndBottomLeft.getValue(), 0));
+		
+		borderSize0 = topLeft;
+		borderSize1 = topRightAndBottomLeft;
+		borderSize2 = bottomRight;
+		borderSize3 = topRightAndBottomLeft;
+	}
+	
+	public Measurement[] getBorderSize() {
+		return new Measurement[] {
+				borderSize0,
+				borderSize1,
+				borderSize2,
+				borderSize3
+		};
+	}
+	
+	public void setBorderRadius(Measurement allsides) {
+		allsides.setValue(Math.max(allsides.getValue(), 0));
+		
+		borderRadius0 = allsides;
+		borderRadius1 = allsides;
+		borderRadius2 = allsides;
+		borderRadius3 = allsides;
+	}
+	
+	public void setBorderRadius(
+			Measurement topLeft, 
+			Measurement bottomRight
+		) {
+		topLeft.setValue(Math.max(topLeft.getValue(), 0));
+		bottomRight.setValue(Math.max(bottomRight.getValue(), 0));
+		
+		borderRadius0 = topLeft;
+		borderRadius2 = bottomRight;
+	}
+	
+	public void setBorderRadius(
+			Measurement topLeft, 
+			Measurement topRight, 
+			Measurement bottomRight,
+			Measurement bottomLeft
+		) {
+		topLeft.setValue(Math.max(topLeft.getValue(), 0));
+		topRight.setValue(Math.max(topRight.getValue(), 0));
+		bottomRight.setValue(Math.max(bottomRight.getValue(), 0));
+		bottomLeft.setValue(Math.max(bottomLeft.getValue(), 0));
+		
+		borderRadius0 = topLeft;
+		borderRadius1 = topRight;
+		borderRadius2 = bottomRight;
+		borderRadius3 = bottomLeft;
+	}
+	
+	public void setBorderRadius(
+			Measurement topLeft, 
+			Measurement topRightAndBottomLeft, 
+			Measurement bottomRight
+		) {
+		topLeft.setValue(Math.max(topLeft.getValue(), 0));
+		bottomRight.setValue(Math.max(bottomRight.getValue(), 0));
+		topRightAndBottomLeft.setValue(Math.max(topRightAndBottomLeft.getValue(), 0));
+		
+		borderRadius0 = topLeft;
+		borderRadius1 = topRightAndBottomLeft;
+		borderRadius2 = bottomRight;
+		borderRadius3 = topRightAndBottomLeft;
+	}
+	
+	public Measurement[] getBorderRadius() {
+		return new Measurement[]{
+				borderRadius0, 
+				borderRadius1, 
+				borderRadius2, 
+				borderRadius3
+		};
 	}
 	
 	public void setBorderColor(Color color) {
@@ -73,16 +175,28 @@ public class GraphicsAttributes extends DefaultAttributes {
 		return backgroundColor;
 	}
 	
+	public void setOverflow(Overflow overflow) {
+		this.overflow = overflow;
+	}
+	
+	public Overflow getOverflow() {
+		return this.overflow;
+	}
+	
+	public void setEventListener(IEvent eventListener) {
+		this.eventListener = eventListener;
+	}
+	
 	@Override
 	public void render(Graphics2D g2) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
-		
+		if(this.eventListener != null) {
+			
+		}
 	}
 
 }

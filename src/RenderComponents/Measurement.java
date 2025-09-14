@@ -24,6 +24,10 @@ public class Measurement {
 		result = convertValue();
 	}
 	
+	public static Measurement Pixel() {
+		return new Measurement(Measure.PX, 0);
+	}
+	
 	public void setMeasurement(Measure measure) {
 		this.measure = measure;
 		result = convertValue();
