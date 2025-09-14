@@ -25,7 +25,31 @@ public class Measurement {
 	}
 	
 	public static Measurement Pixel() {
-		return new Measurement(Measure.PX, 0);
+		return new Measurement(Measure.PX, 1);
+	}
+	
+	public static Measurement MilliMeter() {
+		return new Measurement(Measure.MM, 1);
+	}
+	
+	public static Measurement CentiMeter() {
+		return new Measurement(Measure.CM, 1);
+	}
+	
+	public static Measurement Meter() {
+		return new Measurement(Measure.M, 1);
+	}
+	
+	public static Measurement Inch() {
+		return new Measurement(Measure.IN, 1);
+	}
+	
+	public static Measurement Point() {
+		return new Measurement(Measure.PT, 1);
+	}
+	
+	public static Measurement Picas() {
+		return new Measurement(Measure.PC, 1);
 	}
 	
 	public void setMeasurement(Measure measure) {

@@ -187,16 +187,10 @@ public class GraphicsAttributes extends DefaultAttributes {
 		this.eventListener = eventListener;
 	}
 	
+	
 	@Override
-	public void render(Graphics2D g2) {
-		// TODO Auto-generated method stub
-	}
-
+	public void render(Graphics2D g2) {}
 	@Override
-	public void tick() {
-		if(this.eventListener != null) {
-			
-		}
-	}
+	public void tick() {}
 
 }

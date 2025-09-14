@@ -60,6 +60,10 @@ public class Dimension {
 		});
 	}
 	
+	public static Dimension Fill() {
+		return new Dimension(1, 0, 1, 0);
+	}
+	
 	public static int getWindowWidth() {
 		return WindowWidth;
 	}
