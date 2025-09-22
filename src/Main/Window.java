@@ -35,6 +35,7 @@ public class Window extends Entity implements Runnable {
 	private IWindowMoved windowMovedListener;
 	
 	private HashMap<Key, Object> renderHints = new HashMap<>();
+	private Quality graphicsQuality = Quality.LOW;
 	
 	private double FRAME_PER_NANOS;
 	
@@ -159,9 +160,15 @@ public class Window extends Entity implements Runnable {
 		return frame.getLocation().y;
 	}
 	
+	public Quality getQuality() {
+		return graphicsQuality;
+	}
+	
 	public void setQuality(Quality quality) {
+		graphicsQuality = quality;
 		renderHints.clear();
-		switch(quality) {
+		
+		switch(graphicsQuality) {
 		case LOW:
 			lowQuality();
 			break;
