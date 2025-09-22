@@ -1,5 +1,6 @@
 package Main;
 
+import Modifiers.Quality;
 import Render.Engine;
 import RenderComponents.Dimension;
 import RenderComponents.Measurement;
@@ -23,6 +24,8 @@ public class Main {
 		
 		IGraphicWindow engine = new Engine();
 		window.setGraphicWindow(engine);
+		
+		window.setQuality(Quality.HIGH);
 		
 		window.startEngine();
 	}

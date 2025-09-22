@@ -11,10 +11,15 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.ImageCapabilities;
 import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.RenderingHints.Key;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
+import java.util.HashMap;
+
 import javax.swing.JFrame;
 
+import Modifiers.Quality;
 import RenderComponents.Entity;
 
 public class Window extends Entity implements Runnable {
@@ -29,6 +34,8 @@ public class Window extends Entity implements Runnable {
 	private IWindowRescaled windowRescaledListener;
 	private IWindowMoved windowMovedListener;
 	
+	private HashMap<Key, Object> renderHints = new HashMap<>();
+	
 	private double FRAME_PER_NANOS;
 	
 	public void build(String title, int width, int height) {
@@ -38,6 +45,8 @@ public class Window extends Entity implements Runnable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+		setQuality(Quality.LOW);
 		
 		setBufferFPS(0);
 		
@@ -149,6 +158,58 @@ public class Window extends Entity implements Runnable {
 	public int getYOnScreen() {
 		return frame.getLocation().y;
 	}
+	
+	public void setQuality(Quality quality) {
+		renderHints.clear();
+		switch(quality) {
+		case LOW:
+			lowQuality();
+			break;
+		case MEDIUM:
+			mediumQuality();
+			break;
+		case HIGH:
+			highQuality();
+			break;
+		default:
+			lowQuality();
+			break;
+		}
+	}
+	
+	private void lowQuality() {
+		renderHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		renderHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		renderHints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+		renderHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+		renderHints.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
+		renderHints.put(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
+		renderHints.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
+		renderHints.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+	}
+	
+	private void mediumQuality() {
+		renderHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		renderHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		renderHints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		renderHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_DEFAULT);
+		renderHints.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_DEFAULT);
+		renderHints.put(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+		renderHints.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+		renderHints.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+	}
+	
+	private void highQuality() {
+		renderHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		renderHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+		renderHints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		renderHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		renderHints.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+		renderHints.put(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+		renderHints.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+		renderHints.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+		renderHints.put(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+	}
 
 	public void run() {
 		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -219,6 +280,8 @@ public class Window extends Entity implements Runnable {
 		
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		g2.setRenderingHints(renderHints);
 		
 		this.render(g2);
 		graphicWindow.render(this, g2);
