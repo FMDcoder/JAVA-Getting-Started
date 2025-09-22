@@ -17,11 +17,11 @@ public class Engine implements IGraphicWindow {
 		// TODO Auto-generated method stub
 		frame = new Frame();
 		frame.setPosition(
-				new Dimension(0.4, 0, 0.4, 0)
+				new Dimension(0.5, -100, 0.5, -100)
 		);
 		
 		frame.setSize(
-				new Dimension(0.2, 0, 0.2, 0)
+				new Dimension(0, 200, 0, 200)
 		);
 		
 		frame.setPositionType(Position.RELATIVE);
@@ -29,11 +29,11 @@ public class Engine implements IGraphicWindow {
 		
 		frame2 = new Frame();
 		frame2.setPosition(
-				new Dimension(0.4, 0, 0.4, 0)
+				new Dimension(0.5, -50, 0.5, -50)
 		);
 		
 		frame2.setSize(
-				new Dimension(0.2, 0, 0.2, 0)
+				new Dimension(0, 100, 0, 100)
 		);
 		
 		frame2.setPositionType(Position.RELATIVE);

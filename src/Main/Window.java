@@ -36,6 +36,7 @@ public class Window extends Entity implements Runnable {
 	
 	private HashMap<Key, Object> renderHints = new HashMap<>();
 	private Quality graphicsQuality = Quality.LOW;
+	private boolean autoAdjust = false;
 	
 	private double FRAME_PER_NANOS;
 	
@@ -48,7 +49,6 @@ public class Window extends Entity implements Runnable {
 		frame.setVisible(true);
 		
 		setQuality(Quality.LOW);
-		
 		setBufferFPS(0);
 		
 		ComponentListener componentListener = new ComponentListener() {
@@ -128,6 +128,14 @@ public class Window extends Entity implements Runnable {
         FRAME_PER_NANOS = (refreshRate + bufferFPS) / NANOS_PER_SECOND;
 	}
 	
+	public int getBufferFPS() {
+		return this.bufferFPS;
+	}
+	
+	public int getMaxiumFPS() {
+		return getRefreshRate() + getBufferFPS();
+	}
+	
 	public void setGraphicWindow(IGraphicWindow graphicWin) {
 		this.graphicWindow = graphicWin;
 	}
@@ -158,6 +166,10 @@ public class Window extends Entity implements Runnable {
 	
 	public int getYOnScreen() {
 		return frame.getLocation().y;
+	}
+	
+	public void autoAdjustQuality(boolean doAction) {
+		autoAdjust = doAction;
 	}
 	
 	public Quality getQuality() {
@@ -249,6 +261,24 @@ public class Window extends Entity implements Runnable {
 			
 			if(System.currentTimeMillis() - timer >= 1000) {
 				timer += 1000;
+				
+				if(autoAdjust) {
+					int threshold = 30;
+					if(getRefreshRate() + threshold > fps) {
+						if(getQuality() == Quality.HIGH) {
+							setQuality(Quality.MEDIUM);
+						} else if(getQuality() == Quality.MEDIUM) {
+							setQuality(Quality.LOW);
+						}
+					} else if(getMaxiumFPS() > fps + threshold) {
+						if(getQuality() == Quality.LOW) {
+							setQuality(Quality.MEDIUM);
+						} else if(getQuality() == Quality.MEDIUM) {
+							setQuality(Quality.HIGH);
+						}
+					}
+				}
+				
 				if(fpsChanged != null) {
 					fpsChanged.listen(FPS, fps);
 				}
@@ -276,9 +306,9 @@ public class Window extends Entity implements Runnable {
 					FlipContents.PRIOR
 			);
 			try {
-				frame.createBufferStrategy(3, bc);
+				frame.createBufferStrategy(2, bc);
 			} catch (AWTException e) {
-				frame.createBufferStrategy(3);
+				frame.createBufferStrategy(2);
 			}
 			return;
 		}
