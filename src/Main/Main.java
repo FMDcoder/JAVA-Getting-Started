@@ -25,7 +25,7 @@ public class Main {
 		IGraphicWindow engine = new Engine();
 		window.setGraphicWindow(engine);
 		
-		window.setQuality(Quality.LOW);
+		window.setQuality(Quality.HIGH);
 		
 		window.startEngine();
 	}

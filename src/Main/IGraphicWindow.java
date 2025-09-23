@@ -5,6 +5,6 @@ import RenderComponents.Entity;
 
 public interface IGraphicWindow {
 	public void setup(Entity body);
-	public void tick(Entity body);
+	public void tick(Entity body, double deltaTime, double totalTimeElapsed);
 	public void render(Entity body, Graphics2D g2);
 }

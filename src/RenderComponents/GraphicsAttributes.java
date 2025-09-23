@@ -207,27 +207,25 @@ public class GraphicsAttributes extends DefaultAttributes {
 	
 	private Polygon getSideCalc(
 			double radius, 
-			double offsetRad
+			double offsetRad,
+			double offsetX,
+			double offsetY
+			
 	) {
 		Polygon poly = new Polygon();
 		
-		Point pos = getAbsolutePositionPixels();
-		Point size = getAbsoluteSizePixels();
-		
-		int steps0 = (int)Math.ceil(radius * Math.PI / 2);
+		final double HALF_PI = Math.PI / 2;
+		int steps0 = (int)Math.ceil(radius * HALF_PI);
 		double angStep = Math.PI / (2 * steps0);
 		
-		int xo = (int)(1 - Math.sin(offsetRad));
-		int yo = (int)(1 - Math.cos(offsetRad));
-		
 		for(int i = 0; i < steps0; i++) {
-			int x = (int)(
-					Math.cos(i * angStep) * radius 
-					+ pos.x + (size.x >> 1) * xo);
+			int x = (int)
+					(Math.cos(-i * angStep + offsetRad - HALF_PI) * radius 
+					+ offsetX);
 			
 			int y = (int)(
-					Math.sin(i * angStep) * radius 
-					+ pos.y + (size.y >> 1)) * yo;
+					Math.sin(-i * angStep + offsetRad - HALF_PI) * radius 
+					+ offsetY);
 			
 			poly.addPoint(x, y);
 		}
@@ -252,34 +250,60 @@ public class GraphicsAttributes extends DefaultAttributes {
 	
 	public Polygon getSide(Side side) {
 		Measurement[] cornerRadius = getBorderRadius();
+		Point pos = getAbsolutePositionPixels();
+		Point size = getAbsoluteSizePixels();
+		
 		Polygon poly = new Polygon();
 		
 		double stepAng = Math.PI / 2;
+		double radius;
 		
 		switch(side) {
 		case LEFT_TOP_CORNER:
 			if(cornerRadius[0] == null) {
 				cornerRadius[0] = Measurement.Pixel();
 			}
-			poly = getSideCalc(cornerRadius[0].getResult(), 0);
+			
+			radius = cornerRadius[0].getResult();
+			poly = getSideCalc(
+					cornerRadius[0].getResult(), 0,
+					pos.x - (size.x >> 1) + radius,
+					pos.y - (size.y >> 1) + radius
+			);
 			break;
 		case LEFT_BOTTOM_CORNER:
 			if(cornerRadius[1] == null) {
 				cornerRadius[1] = Measurement.Pixel();
 			}
-			poly = getSideCalc(cornerRadius[1].getResult(), stepAng);
+			
+			radius = cornerRadius[1].getResult();
+			poly = getSideCalc(
+					cornerRadius[1].getResult(), stepAng * 3,
+					pos.x - (size.x >> 1) + radius,
+					pos.y + (size.y >> 1) - radius
+			);
 			break;
 		case RIGHT_BOTTOM_CORNER:
 			if(cornerRadius[2] == null) {
 				cornerRadius[2] = Measurement.Pixel();
 			}
-			poly = getSideCalc(cornerRadius[2].getResult(), stepAng * 2);
+			
+			radius = cornerRadius[2].getResult();
+			poly = getSideCalc(cornerRadius[2].getResult(), stepAng * 2,
+					pos.x + (size.x >> 1) - radius,
+					pos.y + (size.y >> 1) - radius
+			);
 			break;
 		case RIGHT_TOP_CORNER:
 			if(cornerRadius[3] == null) {
 				cornerRadius[3] = Measurement.Pixel();
 			}
-			poly = getSideCalc(cornerRadius[3].getResult(), stepAng * 3);
+			
+			radius = cornerRadius[1].getResult();
+			poly = getSideCalc(cornerRadius[3].getResult(), stepAng,
+					pos.x + (size.x >> 1) - radius,
+					pos.y - (size.y >> 1) + radius
+			);
 			break;
 		case LEFT_SIDE:
 			poly = combinePolygons(

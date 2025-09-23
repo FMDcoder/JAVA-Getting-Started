@@ -38,6 +38,10 @@ public class Window extends Entity implements Runnable {
 	private Quality graphicsQuality = Quality.LOW;
 	private boolean autoAdjust = false;
 	
+	private long lastDelta = System.nanoTime(),
+			currDelta = System.nanoTime(),
+			runTime = System.nanoTime();
+	
 	private double FRAME_PER_NANOS;
 	
 	public void build(String title, int width, int height) {
@@ -246,6 +250,8 @@ public class Window extends Entity implements Runnable {
         
         long timer = System.currentTimeMillis();
         int fps = 0;
+        
+        runTime = System.nanoTime();
 		
 		while(running) {
 			now = System.nanoTime();
@@ -292,7 +298,14 @@ public class Window extends Entity implements Runnable {
 		for(Entity entity : getDescendents()) {
 			entity.tick();
 		}
-		graphicWindow.tick(this);
+		
+		currDelta = System.nanoTime();
+		double deltaTime = (currDelta - lastDelta) / (10e8 * 1.0);
+		lastDelta = currDelta;
+		
+		double totalTimeElapsed = (System.nanoTime() - runTime) / (10e8 * 1.0);
+		
+		graphicWindow.tick(this, deltaTime, totalTimeElapsed);
 	}
 	
 	private void render() {

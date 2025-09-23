@@ -3,9 +3,11 @@ package Render;
 import java.awt.Graphics2D;
 
 import Main.IGraphicWindow;
+import Modifiers.Measure;
 import Modifiers.Position;
 import RenderComponents.Dimension;
 import RenderComponents.Entity;
+import RenderComponents.Measurement;
 import RenderObjects.Frame;
 
 public class Engine implements IGraphicWindow {
@@ -17,7 +19,7 @@ public class Engine implements IGraphicWindow {
 		// TODO Auto-generated method stub
 		frame = new Frame();
 		frame.setPosition(
-				new Dimension(0.5, -100, 0.5, -100)
+				new Dimension(0.5, 0, 0.5, 0)
 		);
 		
 		frame.setSize(
@@ -26,27 +28,21 @@ public class Engine implements IGraphicWindow {
 		
 		frame.setPositionType(Position.RELATIVE);
 		
-		
-		frame2 = new Frame();
-		frame2.setPosition(
-				new Dimension(0.5, -50, 0.5, -50)
-		);
-		
-		frame2.setSize(
-				new Dimension(0, 100, 0, 100)
-		);
-		
-		frame2.setPositionType(Position.RELATIVE);
-		
-		frame.addChild(frame2);
+		Measurement measureBorder = new Measurement(Measure.PX, 100);
+		frame.setBorderRadius(measureBorder);
 		
 		
 		body.addChild(frame);
 	}
 
 	@Override
-	public void tick(Entity body) {
-		// TODO Auto-generated method stub
+	public void tick(Entity body, double deltaTime, double totalTimeElapsed) {
+		System.out.println(totalTimeElapsed);
+		Measurement measureBorder = new Measurement(
+				Measure.CM, 
+				Math.abs(Math.sin(totalTimeElapsed * 0.1) * 2)
+		);
+		frame.setBorderRadius(measureBorder);
 	}
 
 	@Override

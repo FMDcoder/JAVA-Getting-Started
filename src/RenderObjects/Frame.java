@@ -19,8 +19,13 @@ public class Frame extends GraphicsAttributes {
 		
 		// bode
 		Polygon s = getShape();
-		System.out.println(s.xpoints[1]+" "+ s.ypoints[1]);
-		g2.fillPolygon(getShape());
+		
+		g2.setColor(Color.BLACK);
+		
+		/*for(int i = 0; i < s.npoints; i++) {
+			g2.fillOval(s.xpoints[i], s.ypoints[i], 20, 20);
+		}*/
+		g2.drawPolygon(s);
 		
 		g2.setTransform(orgAt);
 	}
